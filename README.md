@@ -1,29 +1,9 @@
-# charted-server | Helm Plugin
+# 🐻‍❄️🌺 Helm Plugin for charted-server
+> *Helm plugin to help you push your Helm charts to [charted-server](https://github.com/charted-dev/charted) easily!~*
 
-> _Helm plugin to manage Helm chart repositories with [charted-server](https://charts.noelware.org)_
->
-> <kbd>v0.3-nightly</kbd> | [:scroll: **Documentation**](https://charts.noelware.org/docs/helm-plugin/current)
-
-This is the source code root for the [`helm charted`](https://charts.noelware.org/docs/helm-plugin/current) subcommand. This exists to make
-it easy to push your Helm charts into **charted-server** easily. :3
+**helm-plugin** is the canonical source for charted's Helm plugin, which helps you push your Helm charts into [charted-server](https://github.com/charted-dev/charted) with `helm charted push` easily.
 
 ## Usage
-
-> **Note** - Replace `[os]` with your operating system (`windows`, `darwin` [macOS], `linux`) and `[arch]` with your host
-> architecture (`amd64` [x86_64], `arm64`)
-
-```shell
-$ helm plugin install https://artifacts.noelware.cloud/charted/helm-plugin/{{VERSION}}/helm-plugin.[os]-[arch].tar.gz
-
-# Login into charted-server. The Helm plugin creates its own API key to upload in repositories
-$ helm charted login
-
-# Push your Helm chart
-$ helm charted push noel/hazel
-```
-
-You can also have a `.charted.yaml` file in the directory where you are executing `helm charted` to represent what chart it is:
-
-```yaml
-repository: noel/hazel
-```
+## Contributing
+## License
+Apache 2.0

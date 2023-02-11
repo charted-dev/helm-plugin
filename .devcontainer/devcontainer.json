@@ -1,14 +1,22 @@
 {
-  "name": "helm-plugin",
-  "remoteUser": "noel",
-  "containerUser": "noel",
-  "workspaceFolder": "/workspaces/helm-plugin",
-  "image": "ghcr.io/auguwu/coder-images/rust:latest",
-  "features": {
-    // JetBrains Gateway requires an SSH connection to be available, so,
-    // this is here for that. :)
-    "ghcr.io/devcontainers/features/sshd:1": {
-      "version": "latest"
+    "name": "helm-plugin",
+    "remoteUser": "noel",
+    "containerUser": "noel",
+    "workspaceFolder": "/workspaces/helm-plugin",
+    "image": "ghcr.io/auguwu/coder-images/rust:latest",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "tamasfe.even-better-toml",
+                "rust-lang.rust-analyzer"
+            ]
+        }
+    },
+    "features": {
+        // JetBrains Gateway requires an SSH connection to be available, so,
+        // this is here for that. :)
+        "ghcr.io/devcontainers/features/sshd:1": {
+            "version": "latest"
+        }
     }
-  }
 }
