@@ -1,3 +1,6 @@
+# WARNING
+This repository has been merged into the [main repository](https://github.com/charted-dev/charted) under the `tools/helm-plugin` folder.
+
 # 🐻‍❄️🌺 Helm Plugin for charted-server
 > *Helm plugin to help you push your Helm charts to [charted-server](https://github.com/charted-dev/charted) easily!~*
 
