@@ -38,7 +38,7 @@ Options:
 ### Nix/NixOS
 Under the [`Noelware/nixpkgs-noelware`] overlay, **charted-helm-plugin** is avaliable that can be wrapped with `wrapHelm kubernetes-helm`:
 
-```shell
+```nix
 {
     inputs = {
         nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
