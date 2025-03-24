@@ -86,7 +86,7 @@ If you read both if you're a new time contributor, now you can do the following:
 -   Submit a Pull Request and then cry! ｡･ﾟﾟ･(థ Д థ。)･ﾟﾟ･｡
 
 ## License
-**charted-helm-plugin** is released under the [Apache 2.0 License] with love and care by the team. Also, **Dr. Pepper** is also to blame. #notsponsored
+**charted-helm-plugin** is released under the **Apache 2.0** License with love and care by the team. Also, **Dr. Pepper** is also to blame. #notsponsored
 
 [old source tree in `charted-dev/charted`]: https://github.com/charted-dev/charted/tree/56fe557b186ce8ca1743f5d783dec335d2b39175/crates/helm/plugin
 [`Noelware/nixpkgs-noelware`]: https://github.com/Noelware/nixpkgs-noelware
