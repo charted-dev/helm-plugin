@@ -1,0 +1,113 @@
+# 🐻‍❄️🌺 charted-helm-plugin: Helm plugin to help faciliate operations with charted-server
+# Copyright 2023-2025 Noelware, LLC. <team@noelware.org>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Release / Stable
+on:
+    push:
+        tags:
+            - 'v?[0-9]+.[0-9]+.[0-9]+'
+jobs:
+    binaries:
+        name: "Rust / Build :: ${{matrix.runner == 'ubuntu-24.04' && 'Linux (x64)' || matrix.runner == 'linux-aarch64' && 'Linux (aarch64)' || matrix.runner == 'macos-latest' && 'macOS (x64)' || matrix.runner == 'macos-14-xlarge' && 'macOS (aarch64)' || matrix.runner == 'windows-latest' && 'Windows (x64)'}}"
+        runs-on: ${{matrix.runner}}
+        if: ${{github.repository == 'charted-dev/helm-plugin'}}
+        strategy:
+            fail-fast: true
+            matrix:
+                include:
+                    - runner: ubuntu-24.04
+                      os: linux
+                      arch: x86_64
+
+                    - runner: linux-aarch64
+                      os: linux
+                      arch: aarch64
+
+                    - runner: macos-latest
+                      os: darwin
+                      arch: x86_64
+
+                    - runner: macos-14-xlarge
+                      os: darwin
+                      arch: aarch64
+
+                    - runner: windows-latest
+                      os: windows
+                      arch: x86_64
+        env:
+            CARGOFLAGS: -Zbuild-std=std,panic_abort -Zbuild-std-features=optimize_for_size,panic_immediate_abort,backtrace
+        steps:
+            - uses: actions/checkout@v4
+            - uses: Swatinem/rust-cache@v2
+            - uses: auguwu/git-tag-action@master
+              id: tag
+
+            - name: 'Windows: Install `nasm` for `aws-lc-sys`'
+              if: ${{matrix.runner == 'windows-latest'}}
+              uses: ilammy/setup-nasm@v1
+
+            - run: "./src/ci/${{matrix.os == 'darwin' && 'macos' || matrix.os}}/${{matrix.os == 'windows' && 'Release.ps1' || 'release'}}"
+              env:
+                  RUSTFLAGS: ''
+                  CARGOFLAGS: ${{env.CARGOFLAGS}}
+
+            - name: Upload (/charted/helm-plugin/${{steps.tag.outputs.version}})
+              uses: Noelware/s3-action@2.2.7
+              with:
+                  enforce-path-access-style: true
+                  access-key-id: ${{secrets.S3_ACCESS_KEY}}
+                  path-format: "$(prefix)/charted/helm-plugin/${{steps.tag.outputs.version}}/charted-${{matrix.os}}-${{matrix.arch}}${{matrix.os == 'windows' && '.exe' || ''}}"
+                  secret-key: ${{secrets.S3_SECRET_KEY}}
+                  directories: ./.result
+                  endpoint: ${{secrets.S3_ENDPOINT}}
+                  region: us-east-1
+                  prefix: /noelware/artifacts
+                  bucket: august
+
+            - name: Upload (/charted/helm-plugin/latest)
+              uses: Noelware/s3-action@2.2.7
+              with:
+                  enforce-path-access-style: true
+                  access-key-id: ${{secrets.S3_ACCESS_KEY}}
+                  path-format: "$(prefix)/charted/helm-plugin/latest/charted-${{matrix.os}}-${{matrix.arch}}${{matrix.os == 'windows' && '.exe' || ''}}"
+                  secret-key: ${{secrets.S3_SECRET_KEY}}
+                  directories: ./.result
+                  endpoint: ${{secrets.S3_ENDPOINT}}
+                  region: us-east-1
+                  prefix: /noelware/artifacts
+                  bucket: august
+    nix-build:
+        name: 'Nix / Build'
+        runs-on: ubuntu-latest
+        if: ${{github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'charted-dev/charted'}}
+        steps:
+            - uses: actions/checkout@v4
+            - uses: cachix/install-nix-action@v31
+
+            # TODO(@auguwu): switch to https://nix.noelware.org,
+            #                which uses Attic as the binary cache
+            #                service.
+            # - uses: ryanccn/attic-action@v0
+            #   with:
+            #       endpoint: https://nix.noelware.org
+            #       cache: noelware
+            #       token: ${{secrets.NIX_BINARY_CACHE_TOKEN}}
+
+            - uses: cachix/cachix-action@v16
+              with:
+                  name: noelware
+                  authToken: ${{secrets.CACHIX_AUTH_TOKEN}}
+
+            - run: nix build .#helm-plugin

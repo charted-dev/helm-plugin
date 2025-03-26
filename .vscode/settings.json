@@ -1,0 +1,18 @@
+{
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "rust-analyzer.check.command": "clippy",
+    "rust-analyzer.showUnlinkedFileNotification": false,
+    "rust-analyzer.runnables.extraEnv": {
+        // Generate a full backtrace when tests error out
+        "RUST_BACKTRACE": "full"
+    },
+
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    "[toml]": {
+        "editor.defaultFormatter": "tamasfe.even-better-toml"
+    }
+}
