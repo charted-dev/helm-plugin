@@ -22,6 +22,7 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
 fn main() -> eyre::Result<()> {
     dotenvy::dotenv().unwrap_or_default();
+    color_eyre::install()?;
 
     let program = Program::parse();
     program.init_logging();
