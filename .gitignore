@@ -142,5 +142,6 @@ Cargo.lock
 .history
 .ionide
 
+!Cargo.lock
 .direnv/
 !src/bin

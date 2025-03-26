@@ -61,19 +61,23 @@ url = { version = "2.5.4", features = ["serde"] }
 [dependencies.azalia]
 version = "0.1.0"
 git = "https://github.com/Noelware/azalia"
-features = ["log", "log-writers", "log-tracing-log"]
+rev = "153a13ef2aa361ecb8e6023e25ffa97673e82c4b"
+features = ["log", "log+writers", "log+tracing-log"]
 
 # TODO(@auguwu): use the crates.io version of these crates once avaliable
 [dependencies.charted-core]
 git = "https://github.com/charted-dev/charted"
+rev = "7c6ea57387ba140641e2c271ffb6f8ae13a58064"
 version = "0.1.0"
 features = ["schemars"]
 
 [dependencies.charted-helm-types]
 git = "https://github.com/charted-dev/charted"
+rev = "7c6ea57387ba140641e2c271ffb6f8ae13a58064"
 version = "0.1.0"
 
 [dependencies.charted-types]
 git = "https://github.com/charted-dev/charted"
+rev = "7c6ea57387ba140641e2c271ffb6f8ae13a58064"
 version = "0.1.0"
 features = ["jsonschema"]
