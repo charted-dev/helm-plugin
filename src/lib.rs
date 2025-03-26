@@ -27,7 +27,7 @@ pub(crate) mod serde;
 use azalia::log::writers::default::Writer;
 use commands::Subcommand;
 use std::io;
-use tracing::Level;
+use tracing::{Level, level_filters::LevelFilter};
 use tracing_subscriber::prelude::*;
 
 #[derive(Debug, clap::Parser)]
@@ -52,12 +52,15 @@ impl Program {
     #[doc(hidden)]
     pub fn init_logging(&self) {
         tracing_subscriber::registry()
-            .with(azalia::log::WriteLayer::new_with(io::stderr(), Writer {
-                print_module: false,
-                print_thread: false,
+            .with(
+                azalia::log::WriteLayer::new_with(io::stderr(), Writer {
+                    print_module: false,
+                    print_thread: false,
 
-                ..Default::default()
-            }))
+                    ..Default::default()
+                })
+                .with_filter(LevelFilter::from_level(self.log_level)),
+            )
             .init();
     }
 }

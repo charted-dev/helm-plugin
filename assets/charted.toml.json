@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Config",
+  "description": "Configuration file for configuring repositories when authoring charts that are pushed into [charted-server].\n\n## Example ```toml [global] # semver constraint of what version `charted-helm-plugin` to require. plugin = \">= 0.1\"\n\n# semver constraint of what version of `helm` to require. helm   = \">= 3.12\"\n\n[repository.\"noelware/my-chart\"] source = \"./charts/my-chart\" ```\n\nTo view the properties of **my-chart**, you can use the **repository view** subcommand:\n\n```shell $ helm charted repository view my-chart Chart `my-chart`: -> Registry:                    default (https://charts.noelware.org/api/v1) -> Source:                      /git/Noelware/helm-charts/charts/my-chart -> Version (from `Chart.yaml`): 0.1.0 ```\n\n[charted-server]: https://charts.noelware.org",
+  "type": "object",
+  "properties": {
+    "global": {
+      "description": "Global configuration that affects the lifecycle of the plugin.",
+      "default": {
+        "helm_constraint": ">=3.12",
+        "plugin_constraint": ">=0.1.0"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/Global"
+        }
+      ]
+    },
+    "registry": {
+      "description": "A set of registries that are avaliable to each repository.",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Registry"
+      }
+    },
+    "repository": {
+      "description": "A set of repositories determined by a **path**, which is `{{owner}}/{{repo}}`.",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Repository"
+      }
+    }
+  },
+  "definitions": {
+    "Global": {
+      "description": "Global configuration that applies for all operations.",
+      "type": "object",
+      "properties": {
+        "helm_constraint": {
+          "description": "A SemVer version requirement constraint of what version of Helm is supported.\n\n**charted-helm-plugin** uses the [`semver`] crate to parse version requirements, which abides how [Cargo parses and evaluates semantic versioning].\n\n[Cargo parses and evaluates semantic versioning]: https://doc.rust-lang.org/cargo/reference/semver.html [`semver`]: https://crates.io/crates/semver",
+          "default": ">=3.12",
+          "allOf": [
+            {
+              "$ref": "#/definitions/VersionReq"
+            }
+          ]
+        },
+        "plugin_constraint": {
+          "description": "A SemVer version requirement constraint of what version of **charted-helm-plugin** to use for Helm operations.\n\n**charted-helm-plugin** uses the [`semver`] crate to parse version requirements, which abides how [Cargo parses and evaluates semantic versioning].\n\n[Cargo parses and evaluates semantic versioning]: https://doc.rust-lang.org/cargo/reference/semver.html [`semver`]: https://crates.io/crates/semver",
+          "default": ">=0.1.0",
+          "allOf": [
+            {
+              "$ref": "#/definitions/VersionReq"
+            }
+          ]
+        }
+      }
+    },
+    "Registry": {
+      "description": "The `[registry.<name>]` table allows to configure all the avaliable registries.",
+      "type": "object",
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "description": "URL of the registry to point to. This doesn't include the API version in the URI itself (i.e, `https://charts.noelware.org/api/v1`).",
+          "type": "string",
+          "format": "uri"
+        },
+        "version": {
+          "description": "API version of the registry.",
+          "default": 1,
+          "type": "number",
+          "enum": [
+            1
+          ]
+        }
+      }
+    },
+    "Repository": {
+      "type": "object"
+    },
+    "VersionReq": {
+      "type": "string"
+    }
+  }
+}
