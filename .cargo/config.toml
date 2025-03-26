@@ -17,7 +17,7 @@
 rustflags = ["--cfg", "tokio_unstable"]
 
 [alias]
-helm = "run --bin charted_helm_plugin --"
-helm-rl = "run --bin charted_helm_plugin --release --"
+helm = "run --bin charted-helm-plugin --"
+helm-rl = "run --bin charted-helm-plugin --release --"
 
 generate-jsonschema = "run --bin generate_jsonschema --release --"
