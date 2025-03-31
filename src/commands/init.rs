@@ -12,3 +12,30 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+/// Initializes a new chart repository structure.
+///
+/// **helm charted** uses a `.charted.toml` file to define a list of
+/// Helm charts that can be easily published to **charted-server**
+/// using the following structure:
+///
+/// ```toml
+/// repository."myuser/repo".source = "./charts/mychart"
+/// ```
+///
+/// This is similar to the following JSON object:
+/// ```json
+/// {
+///     "repository": {
+///         "myuser/repo": {
+///             "source": "./charts/mychart"
+///         }
+///     }
+/// }
+/// ```
+///
+/// This will initialize a default `.charted.toml` configuration file. This will not
+/// initialize any repositories as it is ambiguous to know the repository location (i.e,
+/// the `myuser/repo` from above) since it needs to be known ahead-of-time.
+#[derive(Debug, clap::Parser)]
+pub struct Args {}

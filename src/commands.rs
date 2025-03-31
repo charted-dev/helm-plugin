@@ -24,6 +24,15 @@ mod repository;
 #[derive(Debug, clap::Subcommand)]
 pub enum Subcommand {
     Completions(completions::Args),
+    Init(init::Args),
+    Login(login::Args),
+    Logout(logout::Args),
+
+    #[command(subcommand)]
+    Context(context::Subcmd),
+
+    #[command(subcommand)]
+    Repository(repository::Subcmd),
 
     #[command(hide(true))]
     Download(download::Args),
@@ -34,6 +43,9 @@ impl Subcommand {
         match self {
             Subcommand::Completions(args) => completions::run(args),
             Subcommand::Download(args) => download::run(args).await,
+            Subcommand::Context(cmd) => cmd.run(),
+            Subcommand::Repository(cmd) => cmd.run().await,
+            _ => todo!(),
         }
     }
 }

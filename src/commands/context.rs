@@ -12,3 +12,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+mod add;
+mod delete;
+mod list;
+mod switch;
+
+/// Subcommands for dealing with authentication contexts.
+#[derive(Debug, clap::Subcommand)]
+pub enum Subcmd {
+    Add(add::Args),
+}
+
+impl Subcmd {
+    pub fn run(self) -> eyre::Result<()> {
+        match self {
+            Self::Add(args) => add::run(args),
+        }
+    }
+}

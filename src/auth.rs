@@ -21,20 +21,24 @@ use secrecy::{ExposeSecret, SecretString};
 use serde::{Deserialize, Serialize};
 use std::{
     collections::HashMap,
-    fs::{File, OpenOptions},
+    fs::{self, File, OpenOptions},
     io::Write,
     path::PathBuf,
-    rc::Rc,
+    str::FromStr,
+    sync::Arc,
 };
 
-/// A single-threaded initialized string used for contextual [`Auth`] instances.
+/// A multithreaded-threaded initialized string used for contextual [`Auth`] instances.
+///
+/// Originally, this was only a **Rc** but switched to **Arc** due to clap's
+/// circumstances.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash, derive_more::Display)]
-pub struct Context(Rc<str>);
+pub struct Context(Arc<str>);
 
 impl Context {
     /// Creates a new [`Context`] with a given string (`s`).
     pub fn new(s: impl AsRef<str>) -> Self {
-        Self(Rc::from(s.as_ref()))
+        Self(Arc::from(s.as_ref()))
     }
 }
 
@@ -63,7 +67,7 @@ pub struct Credential {
 /// Representation of what authentication scheme to use when requesting to
 /// **charted-server**.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "kebab-case", untagged, deny_unknown_fields)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub enum Repr {
     /// Loads the API key from a system environment variable.
     EnvironmentVariable(String),
@@ -104,6 +108,59 @@ impl Repr {
     }
 }
 
+/// Error thrown by [`Repr`]'s [`FromStr`] impl.
+#[derive(Debug, derive_more::Display)]
+pub enum ReprStrError {
+    #[display("excessive delimiter [{delim}] received")]
+    ExcessiveDelimiter { delim: char },
+
+    #[display("invalid syntax for `basic` directive: expected `username:password`")]
+    InvalidSyntax,
+
+    #[display("unknown prefix or none given: expected `env:`, `apikey:`, or `basic:`")]
+    UnknownPrefix,
+
+    #[display("contents was empty")]
+    Empty,
+}
+
+impl std::error::Error for ReprStrError {}
+
+impl FromStr for Repr {
+    type Err = ReprStrError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if s.is_empty() {
+            return Err(ReprStrError::Empty);
+        }
+
+        if let Some(key) = s.strip_prefix("env:") {
+            return Ok(Self::EnvironmentVariable(key.to_ascii_uppercase()));
+        }
+
+        if let Some(key) = s.strip_prefix("apikey:") {
+            return Ok(Self::ApiKey(SecretString::new(Box::from(key))));
+        }
+
+        if let Some(value) = s.strip_prefix("basic:") {
+            if let Some((username, password)) = value.split_once(':') {
+                if password.contains(':') {
+                    return Err(ReprStrError::ExcessiveDelimiter { delim: ':' });
+                }
+
+                return Ok(Self::Basic {
+                    username: username.to_owned(),
+                    password: SecretString::new(Box::from(password)),
+                });
+            } else {
+                return Err(ReprStrError::InvalidSyntax);
+            }
+        }
+
+        Err(ReprStrError::UnknownPrefix)
+    }
+}
+
 /// The schema of the `auth.yaml` in `$CONFIG_DIR/Noelware/charted-helm-plugin`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
@@ -132,6 +189,10 @@ impl Auth {
                 "`auth.yaml` in path `{}` doesn't exist, creating new file...",
                 path.display()
             );
+
+            if let Some(parent) = path.parent() {
+                fs::create_dir_all(parent)?;
+            }
 
             let default = Auth {
                 current: Context::new("default"),
@@ -174,7 +235,11 @@ impl Auth {
     pub fn save(&self) -> eyre::Result<()> {
         debug!(path = %self.opened_file_from.display(), "saving and flushing changes to");
 
-        let mut file = OpenOptions::new().write(true).open(&self.opened_file_from)?;
+        let mut file = OpenOptions::new()
+            .write(true)
+            .truncate(true)
+            .open(&self.opened_file_from)?;
+
         let serialized = serde_yaml_ng::to_string(self)?;
 
         write!(file, "{serialized}")?;
@@ -195,8 +260,9 @@ impl Auth {
 }
 
 #[derive(Debug, clap::Args)]
+#[group(id = "Authentication")]
 pub struct Args {
     /// Location to an `auth.yaml` file that can load credentials.
     #[arg(short = 'c', long = "auth-file", env = "CHARTED_HELM_AUTH_YAML")]
-    pub config_file: Option<PathBuf>,
+    pub file: Option<PathBuf>,
 }

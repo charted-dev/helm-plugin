@@ -22,6 +22,7 @@ extern crate eyre;
 pub mod auth;
 pub mod commands;
 pub mod config;
+pub mod http;
 pub(crate) mod serde;
 
 use azalia::log::writers::default::Writer;

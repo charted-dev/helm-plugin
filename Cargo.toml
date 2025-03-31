@@ -29,6 +29,22 @@ license = "Apache-2.0"
 publish = false
 repository = "https://github.com/charted-dev/helm-plugin"
 rust-version = "1.85"
+exclude = ["src/ci/**/*"]
+
+[features]
+default = ["http+rustls"]
+
+# We natively support both OpenSSL and rustls and can be switched from commands
+# that support sending network requests (i.e, `--ssl-provider=openssl|rustls` or
+# set `CHARTED_HELM_HTTP_SSL_PROVIDER=openssl|rustls`).
+#
+# If none of these features are enabled, then the HTTP client can never call
+# HTTPS requests. It's up to the distributor. For official sources, we use
+# `http+rustls` + `http+openssl-vendored` so we don't have to statically link
+# OpenSSL and use the system's OpenSSL.
+"http+openssl-vendored" = ["reqwest/native-tls-vendored"]
+"http+openssl" = ["reqwest/native-tls"]
+"http+rustls" = ["reqwest/rustls-tls"]
 
 [dependencies]
 base64 = "0.22.1"
@@ -46,7 +62,6 @@ reqwest = { version = "0.12.15", default-features = false, features = [
     "macos-system-configuration",
     "json",
     "multipart",
-    "rustls-tls",
 ] }
 schemars = "0.8.22"
 secrecy = { version = "0.10.3", features = ["serde"] }
@@ -60,26 +75,24 @@ tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
 url = { version = "2.5.4", features = ["serde"] }
 
 [dependencies.azalia]
-version = "0.1.0"
-git = "https://github.com/Noelware/azalia"
-rev = "153a13ef2aa361ecb8e6023e25ffa97673e82c4b"
+version = "0.1.1"
 features = ["log", "log+writers", "log+tracing-log"]
 
 # TODO(@auguwu): use the crates.io version of these crates once avaliable
 [dependencies.charted-core]
 git = "https://github.com/charted-dev/charted"
-rev = "7c6ea57387ba140641e2c271ffb6f8ae13a58064"
+rev = "a07fd18f946b85dad900c33498878561b6bc7710"
 version = "0.1.0"
 features = ["schemars"]
 
 [dependencies.charted-helm-types]
 git = "https://github.com/charted-dev/charted"
-rev = "7c6ea57387ba140641e2c271ffb6f8ae13a58064"
+rev = "a07fd18f946b85dad900c33498878561b6bc7710"
 version = "0.1.0"
 
 [dependencies.charted-types]
 git = "https://github.com/charted-dev/charted"
-rev = "7c6ea57387ba140641e2c271ffb6f8ae13a58064"
+rev = "a07fd18f946b85dad900c33498878561b6bc7710"
 version = "0.1.0"
 features = ["jsonschema"]
 

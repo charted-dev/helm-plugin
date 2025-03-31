@@ -12,3 +12,28 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+mod create;
+mod updatedeps;
+mod view;
+
+/// Subcommands for dealing with operations related to Helm chart repositories.
+#[derive(Debug, clap::Subcommand)]
+#[clap(alias = "repo")]
+pub enum Subcmd {
+    Create(create::Args),
+
+    #[command(name = "update-deps", alias("depupdate"), alias("updatedeps"))]
+    UpdateDependencies(updatedeps::Args),
+    View(view::Args),
+}
+
+impl Subcmd {
+    pub async fn run(self) -> eyre::Result<()> {
+        match self {
+            Self::View(_) => todo!(),
+            Self::UpdateDependencies(_) => todo!(),
+            Self::Create(_) => todo!(),
+        }
+    }
+}

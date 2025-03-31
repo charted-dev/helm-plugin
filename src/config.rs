@@ -14,7 +14,7 @@
 // limitations under the License.
 
 use charted_core::api;
-use charted_types::name::Name;
+use charted_types::name::{self, Name};
 use eyre::Context;
 use schemars::JsonSchema;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
@@ -23,6 +23,7 @@ use std::{
     fs::{self, OpenOptions},
     io::Write,
     path::PathBuf,
+    str::FromStr,
 };
 use url::Url;
 
@@ -73,19 +74,57 @@ impl<'de> Deserialize<'de> for Path {
             where
                 E: Error,
             {
-                match v.split_once('/') {
-                    Some((_, repo)) if repo.contains('/') => Err(E::custom("found more than one slash")),
-                    Some((owner, repo)) => Ok(Path {
-                        owner: owner.parse().map_err(E::custom)?,
-                        repository: repo.parse().map_err(E::custom)?,
-                    }),
-
-                    None => Err(E::custom("failed to parse repo path, expected [name/repo] match")),
-                }
+                v.parse().map_err(E::custom)
             }
         }
 
         deserializer.deserialize_str(Visitor)
+    }
+}
+
+/// Error variant for the [`FromStr`] impl for [`Path`].
+#[derive(Debug, derive_more::Display)]
+pub enum PathFromStrError {
+    #[display("excessive delimiter '{delim}' reached, only a single `{delim}` should be present.")]
+    ExcessiveDelimiter {
+        delim: char,
+    },
+
+    #[display("invalid syntax, must be in 'owner/repo' form")]
+    InvalidSyntax,
+
+    #[display("contents was empty")]
+    Empty,
+
+    Name(name::Error),
+}
+
+impl std::error::Error for PathFromStrError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            Self::Name(name) => Some(name),
+            _ => None,
+        }
+    }
+}
+
+impl FromStr for Path {
+    type Err = PathFromStrError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if s.is_empty() {
+            return Err(PathFromStrError::Empty);
+        }
+
+        match s.split_once('/') {
+            Some((_, repo)) if repo.contains('/') => Err(PathFromStrError::ExcessiveDelimiter { delim: '/' }),
+            Some((owner, repo)) => Ok(Path {
+                owner: owner.parse().map_err(PathFromStrError::Name)?,
+                repository: repo.parse().map_err(PathFromStrError::Name)?,
+            }),
+
+            None => Err(PathFromStrError::InvalidSyntax),
+        }
     }
 }
 
@@ -192,4 +231,12 @@ impl Config {
             "No potential `charted.toml` files found in default locations (.charted.toml, charted.toml in current directory). Initialize with `helm charted init`."
         )
     }
+}
+
+#[derive(Debug, clap::Args)]
+#[group(id = "Configuration")]
+pub struct Args {
+    /// Location to an `.charted.toml` file.
+    #[arg(short = 'c', long, env = "CHARTED_HELM_TOML_FILE")]
+    pub config: Option<PathBuf>,
 }

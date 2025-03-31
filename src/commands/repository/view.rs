@@ -12,3 +12,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+use crate::config::{self, Path};
+
+/// Views a repository's metadata from the `.charted.toml` file.
+#[derive(Debug, clap::Parser)]
+pub struct Args {
+    /// a `owner/repo` mapping to view a single repository's metadata
+    repo: Option<Path>,
+
+    #[clap(flatten)]
+    charted: config::Args,
+}

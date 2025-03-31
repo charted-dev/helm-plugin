@@ -12,3 +12,23 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+use crate::{
+    config::{self, Path},
+    http,
+};
+use std::path::PathBuf;
+
+/// Creates a Helm chart repository in a given location and creates
+/// a repository on the registry itself (can be skipped with `--no-registry-creation`)
+#[derive(Debug, clap::Parser)]
+pub struct Args {
+    location: PathBuf,
+    mapping: Option<Path>,
+
+    #[clap(flatten)]
+    charted: config::Args,
+
+    #[clap(flatten)]
+    http: http::Args,
+}
