@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+#
 # 🐻‍❄️🌺 charted-helm-plugin: Helm plugin to help faciliate operations with charted-server
 # Copyright 2023-2025 Noelware, LLC. <team@noelware.org>
 #

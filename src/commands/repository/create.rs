@@ -26,6 +26,15 @@ pub struct Args {
     location: PathBuf,
     mapping: Option<Path>,
 
+    /// Disallows adding this chart onto a registry.
+    #[arg(long, default_value_t = false)]
+    no_registry_creation: bool,
+
+    /// Optional registry to push this repository onto. By default, this'll be
+    /// the `default` registry.
+    #[arg(long, short = 'r')]
+    registry: Option<String>,
+
     #[clap(flatten)]
     charted: config::Args,
 

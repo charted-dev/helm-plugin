@@ -34,11 +34,7 @@ in
     src = ../.;
 
     cargoBuildFlags = ["--bin" "charted-helm-plugin"];
-    cargoLock = {
-      inherit (common) outputHashes;
-
-      lockFile = ../../Cargo.lock;
-    };
+    cargoLock.lockFile = ../../Cargo.lock;
 
     nativeBuildInputs = [pkg-config installShellFiles];
     buildInputs =
@@ -52,7 +48,7 @@ in
     env.CHARTED_DISTRIBUTION_KIND = "nix";
 
     postPatch = ''
-      sed -i '/^hooks:/,+2 d' plugin.yaml
+      sed -i '/^platformHooks:/,+2 d' plugin.yaml
     '';
 
     postInstall = ''

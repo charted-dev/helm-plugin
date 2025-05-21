@@ -15,6 +15,7 @@
 
 mod add;
 mod delete;
+mod export;
 mod list;
 mod switch;
 
@@ -22,12 +23,16 @@ mod switch;
 #[derive(Debug, clap::Subcommand)]
 pub enum Subcmd {
     Add(add::Args),
+    Export(export::Args),
+    Switch(switch::Args),
 }
 
 impl Subcmd {
     pub fn run(self) -> eyre::Result<()> {
         match self {
             Self::Add(args) => add::run(args),
+            Self::Export(args) => export::run(args),
+            Self::Switch(args) => switch::run(args),
         }
     }
 }

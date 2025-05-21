@@ -27,7 +27,7 @@ pub(crate) mod serde;
 
 use azalia::log::writers::default::Writer;
 use commands::Subcommand;
-use std::io;
+use std::{io, path::PathBuf};
 use tracing::{Level, level_filters::LevelFilter};
 use tracing_subscriber::prelude::*;
 
@@ -44,6 +44,10 @@ pub struct Program {
     /// Log level for the log output.
     #[arg(long, short = 'l', env = "CHARTED_LOG_LEVEL", global = true, default_value_t = Level::INFO)]
     pub log_level: Level,
+
+    /// changes to a different working directory
+    #[arg(long, short = 'd', env = "CHARTED_HELM_WORKING_DIRECTORY", global = true, default_value = None)]
+    pub workdir: Option<PathBuf>,
 
     #[command(subcommand)]
     pub command: Subcommand,

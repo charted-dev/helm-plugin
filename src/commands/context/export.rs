@@ -14,13 +14,13 @@
 // limitations under the License.
 
 use crate::auth::{self, Auth, Context};
+use serde_json::json;
 use std::process::exit;
 
-/// Switch the default context.
+/// Exports a context as JSON.
 #[derive(Debug, clap::Parser)]
 pub struct Args {
-    /// Context to switch to.
-    context: Context,
+    context: Option<Context>,
 
     #[clap(flatten)]
     auth: auth::Args,
@@ -28,20 +28,35 @@ pub struct Args {
 
 pub fn run(Args { context, auth }: Args) -> eyre::Result<()> {
     let auth = Auth::load(auth.file)?;
+    let Some(context) = context else {
+        // paranoia check
+        assert!(auth.credentials.contains_key(&auth.current));
+
+        let credential = unsafe { auth.credentials.get(&auth.current).unwrap_unchecked() };
+        println!(
+            "{}",
+            serde_json::to_string(&json!({
+                "context": auth.current,
+                "credential": credential
+            }))?
+        );
+
+        return Ok(());
+    };
+
     if !auth.credentials.contains_key(&context) {
-        error!("context '{}' doesn't exist!", context);
+        warn!("context '{}' doesn't exist!", context);
         exit(1);
     }
 
-    if auth.current == context {
-        warn!("default context is already pointing to {}", context);
-        return Ok(());
-    }
+    let credential = unsafe { auth.credentials.get(&context).unwrap_unchecked() };
+    println!(
+        "{}",
+        serde_json::to_string(&json!({
+            "context": context,
+            "credential": credential
+        }))?
+    );
 
-    let current = auth.current.clone();
-    info!("switching from {} ~> {}", current, context);
-
-    auth.commit(|me| {
-        me.current = context;
-    })
+    Ok(())
 }

@@ -26,10 +26,6 @@
 
   linuxNativeBuildInputs = with pkgs; [mold];
 
-  # rpathInputs = with pkgs; [
-  #   openssl
-  # ];
-
   nativeBuildInputs = with pkgs;
     [pkg-config]
     ++ (lib.optional stdenv.isLinux linuxNativeBuildInputs)
@@ -46,15 +42,12 @@
       cargo-deny
 
       (common.mkRustPlatform pkgs.rust-bin)
-      #openssl
       git
     ]
     ++ (lib.optional stdenv.isLinux [glibc]);
 in
   mkShell {
     inherit buildInputs nativeBuildInputs;
-
-    #LD_LIBRARY_PATH = lib.makeLibraryPath rpathInputs;
 
     name = "charted-helm-plugin-dev";
     shellHook = ''

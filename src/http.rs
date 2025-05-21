@@ -16,42 +16,6 @@
 use charted_core::serde::Duration;
 use std::{ffi::OsStr, fs::File, io::Read, path::PathBuf, str::FromStr};
 
-/// SSL provider to use for HTTPS network requests
-#[derive(Debug, Clone, Copy, Default, clap::ValueEnum, derive_more::Display)]
-pub enum SSLProvider {
-    /// Uses OpenSSL.
-    #[cfg(any(feature = "http+openssl", feature = "http+openssl-vendored"))]
-    #[cfg_attr(
-        all(
-            not(feature = "http+rustls"),
-            any(feature = "http+openssl", feature = "http+openssl-vendored")
-        ),
-        default
-    )]
-    #[display("OpenSSL")]
-    #[value(name = "openssl")]
-    OpenSSL,
-
-    /// Uses **rustls**
-    #[cfg(feature = "http+rustls")]
-    #[display("rustls")]
-    #[value(name = "rustls")]
-    #[cfg_attr(
-        any(feature = "http+rustls", feature = "http+openssl", feature = "http+openssl-vendored"),
-        default
-    )]
-    Rustls,
-
-    /// Disables all HTTPS requests.
-    #[cfg_attr(
-        not(any(feature = "http+rustls", feature = "http+openssl", feature = "http+openssl-vendored")),
-        default
-    )]
-    #[display("none")]
-    #[value(name = "none")]
-    None,
-}
-
 /// a certificate that the HTTP client will load.
 ///
 /// this can be used if the server uses a custom certificate or a self-signed one.
@@ -158,9 +122,6 @@ pub enum CertKind {
 #[derive(Debug, clap::Args)]
 #[group(id = "HTTP")]
 pub struct Args {
-    #[arg(long, default_value_t = SSLProvider::default(), env = "CHARTED_HELM_HTTP_SSL_PROVIDER")]
-    pub ssl_provider: SSLProvider,
-
     #[arg(long, default_value_t = __default_connect_timeout(), env = "CHARTED_HELM_HTTP_CONNECT_TIMEOUT")]
     pub connect_timeout: Duration,
 

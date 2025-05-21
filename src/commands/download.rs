@@ -27,6 +27,20 @@ pub struct Args {
     url: Url,
 }
 
-pub async fn run(Args { .. }: Args) -> eyre::Result<()> {
+pub async fn run(
+    Args {
+        cert_file,
+        key_file,
+        ca_file,
+        url,
+    }: Args,
+) -> eyre::Result<()> {
+    info!(
+        "cert_file={}; key_file={}; ca_file={}; url={url}",
+        cert_file.display(),
+        key_file.display(),
+        ca_file.display()
+    );
+
     Ok(())
 }

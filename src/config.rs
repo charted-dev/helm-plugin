@@ -40,7 +40,8 @@ pub mod repository;
 /// noel/ume
 /// uwuDaOwO~/name
 /// ```
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, derive_more::Display)]
+#[display("{}/{}", self.owner, self.repository)]
 pub struct Path {
     pub owner: Name,
     pub repository: Name,

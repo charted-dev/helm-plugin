@@ -729,41 +729,27 @@ dependencies = [
 
 [[package]]
 name = "azalia"
-version = "0.1.1"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc80e8b8e2dc01a289c59cd668c7bb64898321f09771ef9005188c60faabc2c8"
+checksum = "b7aec3a5dd7a1b39659c18d3a635377b9ef196c6d39b82df35ae730d059a1585"
 dependencies = [
- "azalia-config 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "azalia-config",
  "azalia-log",
- "once_cell",
-]
-
-[[package]]
-name = "azalia"
-version = "0.1.1"
-source = "git+https://github.com/Noelware/azalia#56ca99e58c50287419901039d759d8a8dc49a3c2"
-dependencies = [
- "azalia-config 0.1.1 (git+https://github.com/Noelware/azalia)",
  "azalia-remi",
- "once_cell",
+ "rustc_version",
 ]
 
 [[package]]
 name = "azalia-config"
-version = "0.1.1"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f718780fea527100eb93cde69626fc83d00c9effcf7341c951ed873702ca7889"
-
-[[package]]
-name = "azalia-config"
-version = "0.1.1"
-source = "git+https://github.com/Noelware/azalia#56ca99e58c50287419901039d759d8a8dc49a3c2"
+checksum = "8b808cb1a9bfc2643ac6fbc5671671214361b0eac48190eaa01b11f004077150"
 
 [[package]]
 name = "azalia-log"
-version = "0.1.1"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc0c61acb7ea2bee654782a2c4535a48b1624b4ab8652bcfdcfa958155803d10"
+checksum = "9b5bad16ec41a742a82e6982c299dd455400538d456e59359822fc2a43a01482"
 dependencies = [
  "cfg-if",
  "chrono",
@@ -776,8 +762,9 @@ dependencies = [
 
 [[package]]
 name = "azalia-remi"
-version = "0.1.1"
-source = "git+https://github.com/Noelware/azalia#56ca99e58c50287419901039d759d8a8dc49a3c2"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bf342bd754988198a96101c49d2c7c7948893bae41647d201f1452e81ba11315"
 dependencies = [
  "remi",
  "remi-azure",
@@ -1085,10 +1072,10 @@ checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 [[package]]
 name = "charted-core"
 version = "0.1.0"
-source = "git+https://github.com/charted-dev/charted?rev=a07fd18f946b85dad900c33498878561b6bc7710#a07fd18f946b85dad900c33498878561b6bc7710"
+source = "git+https://github.com/charted-dev/charted?rev=448b6b5be3c5991cf5427c3d666277cd0fd9f1c7#448b6b5be3c5991cf5427c3d666277cd0fd9f1c7"
 dependencies = [
  "argon2",
- "azalia 0.1.1 (git+https://github.com/Noelware/azalia)",
+ "azalia",
  "backtrace",
  "chrono",
  "derive_more 2.0.1",
@@ -1103,6 +1090,7 @@ dependencies = [
  "serde_json",
  "serde_repr",
  "ulid",
+ "utoipa",
  "which 7.0.2",
 ]
 
@@ -1110,7 +1098,7 @@ dependencies = [
 name = "charted-helm-plugin"
 version = "0.1.0"
 dependencies = [
- "azalia 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "azalia",
  "base64 0.22.1",
  "charted-core",
  "charted-helm-types",
@@ -1120,7 +1108,7 @@ dependencies = [
  "color-eyre",
  "derive_more 2.0.1",
  "dotenvy",
- "etcetera 0.10.0",
+ "etcetera",
  "eyre",
  "mimalloc",
  "reqwest",
@@ -1139,7 +1127,7 @@ dependencies = [
 [[package]]
 name = "charted-helm-types"
 version = "0.1.0"
-source = "git+https://github.com/charted-dev/charted?rev=a07fd18f946b85dad900c33498878561b6bc7710#a07fd18f946b85dad900c33498878561b6bc7710"
+source = "git+https://github.com/charted-dev/charted?rev=448b6b5be3c5991cf5427c3d666277cd0fd9f1c7#448b6b5be3c5991cf5427c3d666277cd0fd9f1c7"
 dependencies = [
  "charted-types",
  "chrono",
@@ -1149,7 +1137,7 @@ dependencies = [
 [[package]]
 name = "charted-types"
 version = "0.1.0"
-source = "git+https://github.com/charted-dev/charted?rev=a07fd18f946b85dad900c33498878561b6bc7710#a07fd18f946b85dad900c33498878561b6bc7710"
+source = "git+https://github.com/charted-dev/charted?rev=448b6b5be3c5991cf5427c3d666277cd0fd9f1c7#448b6b5be3c5991cf5427c3d666277cd0fd9f1c7"
 dependencies = [
  "charted-core",
  "chrono",
@@ -1698,17 +1686,6 @@ checksum = "33d852cb9b869c2a9b3df2f71a3074817f01e1844f839a144f5fcef059a4eb5d"
 dependencies = [
  "libc",
  "windows-sys 0.59.0",
-]
-
-[[package]]
-name = "etcetera"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "136d1b5283a1ab77bd9257427ffd09d8667ced0570b6f938942bc7568ed5b943"
-dependencies = [
- "cfg-if",
- "home",
- "windows-sys 0.48.0",
 ]
 
 [[package]]
@@ -2586,9 +2563,9 @@ checksum = "64e9829a50b42bb782c1df523f78d332fe371b10c661e78b7a3c34b0198e9fac"
 
 [[package]]
 name = "infer"
-version = "0.16.0"
+version = "0.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc150e5ce2330295b8616ce0e3f53250e53af31759a9dbedad1621ba29151847"
+checksum = "a588916bfdfd92e71cacef98a63d9b1f0d74d6599980d11894290e7ddefffcf7"
 
 [[package]]
 name = "instant"
@@ -3105,15 +3082,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d05e27ee213611ffe7d6348b942e8f942b37114c00cc03cec254295a4a17852e"
 
 [[package]]
-name = "openssl-src"
-version = "300.4.2+3.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "168ce4e058f975fe43e89d9ccf78ca668601887ae736090aacc23ae353c298e2"
-dependencies = [
- "cc",
-]
-
-[[package]]
 name = "openssl-sys"
 version = "0.9.106"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3121,7 +3089,6 @@ checksum = "8bb61ea9811cc39e3c2069f40b8b8e2e70d8569b361f879786cc7ed48b777cdd"
 dependencies = [
  "cc",
  "libc",
- "openssl-src",
  "pkg-config",
  "vcpkg",
 ]
@@ -3596,9 +3563,9 @@ checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
 
 [[package]]
 name = "remi"
-version = "0.10.1"
+version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "60941a428437426330589644d4d39c9f722dbdf11a2f657b35088ebe586cce7f"
+checksum = "a4dc43efd6f43fdee4825724b07d5effdab488199023b9db4820dd2fe409ceef"
 dependencies = [
  "async-trait",
  "bytes",
@@ -3606,9 +3573,9 @@ dependencies = [
 
 [[package]]
 name = "remi-azure"
-version = "0.10.1"
+version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a9139ecb62fbf0e4297e4df3dfdacaf0431069f02aa038195a587532b884ae10"
+checksum = "e9102dc4a9d6e025da74d832ca51f8a98523d515f1cb78ddb7e6fb75f81a7a49"
 dependencies = [
  "async-trait",
  "azure_core",
@@ -3622,13 +3589,13 @@ dependencies = [
 
 [[package]]
 name = "remi-fs"
-version = "0.10.1"
+version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ebb456a861f3093c9d3c19bccd4de78f52d0eab12ff33d0c22d74cd84858ceae"
+checksum = "a0a6bf230030e14ad7746f737e77eb604da57d303d5cdae74639e1b5f9686c65"
 dependencies = [
- "etcetera 0.8.0",
+ "etcetera",
  "file-format",
- "infer 0.16.0",
+ "infer 0.19.0",
  "remi",
  "rustc_version",
  "serde_json",
@@ -3638,9 +3605,9 @@ dependencies = [
 
 [[package]]
 name = "remi-gridfs"
-version = "0.10.1"
+version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8ad28621d06fdd33ccc618a6a5c3f8303bd6ef6e4618ad1f8131e6522bb5ba7a"
+checksum = "e8541a20e99befa599285728c5a35dd830801792c6c1fa7dfd2ac9b83e32c4da"
 dependencies = [
  "async-trait",
  "bytes",
@@ -3653,9 +3620,9 @@ dependencies = [
 
 [[package]]
 name = "remi-s3"
-version = "0.10.1"
+version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f200c93ebff3f9568135d550e0bdd168e52605891d50a1973303cc231a19e1df"
+checksum = "6a059915a5cfdb56f8ccec4ee27915f55e9405bbaf2b530693f0a28f9d32ee09"
 dependencies = [
  "aws-config",
  "aws-credential-types",
@@ -4049,9 +4016,9 @@ dependencies = [
 
 [[package]]
 name = "sentry-backtrace"
-version = "0.36.0"
+version = "0.37.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "565ec31ad37bab8e6d9f289f34913ed8768347b133706192f10606dabd5c6bc4"
+checksum = "00293cd332a859961f24fd69258f7e92af736feaeb91020cff84dac4188a4302"
 dependencies = [
  "backtrace",
  "once_cell",
@@ -4061,9 +4028,9 @@ dependencies = [
 
 [[package]]
 name = "sentry-core"
-version = "0.36.0"
+version = "0.37.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "653942e6141f16651273159f4b8b1eaeedf37a7554c00cd798953e64b8a9bf72"
+checksum = "1a6409d845707d82415c800290a5d63be5e3df3c2e417b0997c60531dfbd35ef"
 dependencies = [
  "once_cell",
  "sentry-types",
@@ -4073,9 +4040,9 @@ dependencies = [
 
 [[package]]
 name = "sentry-types"
-version = "0.36.0"
+version = "0.37.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2d4203359e60724aa05cf2385aaf5d4f147e837185d7dd2b9ccf1ee77f4420c8"
+checksum = "3d3f117b8755dbede8260952de2aeb029e20f432e72634e8969af34324591631"
 dependencies = [
  "debugid",
  "hex",
@@ -4939,6 +4906,31 @@ name = "utf8parse"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
+
+[[package]]
+name = "utoipa"
+version = "5.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "435c6f69ef38c9017b4b4eea965dfb91e71e53d869e896db40d1cf2441dd75c0"
+dependencies = [
+ "indexmap 2.8.0",
+ "serde",
+ "serde_json",
+ "utoipa-gen",
+]
+
+[[package]]
+name = "utoipa-gen"
+version = "5.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a77d306bc75294fd52f3e99b13ece67c02c1a2789190a6f31d32f736624326f7"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.100",
+ "ulid",
+ "url",
+]
 
 [[package]]
 name = "uuid"

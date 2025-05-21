@@ -206,7 +206,6 @@ impl Auth {
             };
 
             let serialized = serde_yaml_ng::to_string(&default)?;
-
             let mut file = File::create_new(&path)?;
 
             write!(file, "{serialized}")?;

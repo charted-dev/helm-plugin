@@ -14,6 +14,7 @@
 // limitations under the License.
 
 mod create;
+mod index;
 mod updatedeps;
 mod view;
 
@@ -22,6 +23,7 @@ mod view;
 #[clap(alias = "repo")]
 pub enum Subcmd {
     Create(create::Args),
+    Index(index::Args),
 
     #[command(name = "update-deps", alias("depupdate"), alias("updatedeps"))]
     UpdateDependencies(updatedeps::Args),
@@ -31,9 +33,10 @@ pub enum Subcmd {
 impl Subcmd {
     pub async fn run(self) -> eyre::Result<()> {
         match self {
-            Self::View(_) => todo!(),
+            Self::View(args) => view::run(args),
             Self::UpdateDependencies(_) => todo!(),
             Self::Create(_) => todo!(),
+            Self::Index(args) => index::run(args),
         }
     }
 }
