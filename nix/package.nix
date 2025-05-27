@@ -17,8 +17,6 @@
   pkg-config,
   installShellFiles,
   openssl,
-  darwin,
-  stdenv,
   rust-bin,
   lib,
 }: let
@@ -34,19 +32,12 @@ in
     src = ../.;
 
     cargoBuildFlags = ["--bin" "charted-helm-plugin"];
-    cargoLock.lockFile = ../../Cargo.lock;
+    cargoLock.lockFile = ../Cargo.lock;
 
     nativeBuildInputs = [pkg-config installShellFiles];
-    buildInputs =
-      [openssl]
-      ++ (lib.optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-        CoreFoundation
-        Security
-        SystemConfiguration
-      ]));
+    buildInputs = [openssl];
 
     env.CHARTED_DISTRIBUTION_KIND = "nix";
-
     postPatch = ''
       sed -i '/^platformHooks:/,+2 d' plugin.yaml
     '';
@@ -58,9 +49,9 @@ in
 
     meta = with lib; {
       description = "🐻‍❄️📦 Free, open-source way to distribute Helm charts across the world";
-      maintainers = with maintainers; [auguwu spotlightishere noelware];
-      mainProgram = "charted";
-      changelog = "https://charts.noelware.org/changelogs/charted#v${version}";
+      maintainers = with maintainers; [auguwu spotlightishere];
+      mainProgram = "helm charted";
+      changelog = "https://charts.noelware.org/changelogs/helm-plugin#v${version}";
       homepage = "https://charts.noelware.org";
       license = with licenses; [asl20];
     };

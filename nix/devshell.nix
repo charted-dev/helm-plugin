@@ -13,27 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 {pkgs}: let
-  inherit (pkgs) mkShell lib darwin stdenv;
+  inherit (pkgs) mkShell lib stdenv;
 
   common = import ./common.nix;
   rustflags = common.rustflags stdenv;
 
-  darwinNativeBuildInputs = with darwin.apple_sdk.frameworks; [
-    SystemConfiguration
-    CoreFoundation
-    Security
-  ];
-
   linuxNativeBuildInputs = with pkgs; [mold];
-
   nativeBuildInputs = with pkgs;
     [pkg-config]
-    ++ (lib.optional stdenv.isLinux linuxNativeBuildInputs)
-    ++ (lib.optional stdenv.isDarwin darwinNativeBuildInputs);
+    ++ (lib.optional stdenv.isLinux linuxNativeBuildInputs);
 
   buildInputs = with pkgs;
     [
-      cargo-upgrades
       cargo-machete
       cargo-nextest
       cargo-expand

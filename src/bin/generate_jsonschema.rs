@@ -84,7 +84,7 @@ fn jsonschema(path: Option<PathBuf>) -> eyre::Result<()> {
     file.write_all(serialized.as_bytes())?;
     file.flush()?;
 
-    info!("wrote OpenAPI specification in {}", path.display());
+    info!("wrote JSON Schema specification in {}", path.display());
 
     Ok(())
 }

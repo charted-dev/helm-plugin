@@ -24,11 +24,6 @@
       };
     };
 
-    noelware = {
-      url = "github:Noelware/nixpkgs-noelware";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     flake-compat = {
       url = "github:edolstra/flake-compat";
       flake = false;
@@ -39,13 +34,11 @@
     nixpkgs,
     rust-overlay,
     systems,
-    noelware,
     ...
   }: let
     eachSystem = nixpkgs.lib.genAttrs (import systems);
     overlays = [
       (import rust-overlay)
-      (import noelware)
     ];
 
     nixpkgsFor = system:
