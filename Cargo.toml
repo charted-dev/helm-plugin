@@ -67,18 +67,18 @@ features = ["log", "log+writers", "log+tracing-log"]
 # TODO(@auguwu): use the crates.io version of these crates once avaliable
 [dependencies.charted-core]
 git = "https://github.com/charted-dev/charted"
-rev = "448b6b5be3c5991cf5427c3d666277cd0fd9f1c7"
+rev = "2b9f6d5dc80bd0c4aa0ee3220d0ee1b642b61dc4"
 version = "0.1.0"
 features = ["schemars"]
 
 [dependencies.charted-helm-types]
 git = "https://github.com/charted-dev/charted"
-rev = "448b6b5be3c5991cf5427c3d666277cd0fd9f1c7"
+rev = "2b9f6d5dc80bd0c4aa0ee3220d0ee1b642b61dc4"
 version = "0.1.0"
 
 [dependencies.charted-types]
 git = "https://github.com/charted-dev/charted"
-rev = "448b6b5be3c5991cf5427c3d666277cd0fd9f1c7"
+rev = "2b9f6d5dc80bd0c4aa0ee3220d0ee1b642b61dc4"
 version = "0.1.0"
 features = ["jsonschema"]
 
