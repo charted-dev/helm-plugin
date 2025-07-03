@@ -720,9 +720,9 @@ dependencies = [
 
 [[package]]
 name = "azalia"
-version = "0.1.8"
+version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "da9ecbe94b9a89033546753f3b78e0cafcd759c1b035715341d59dc3353a53aa"
+checksum = "327f14c2672cf7f0b16060b82fae18808fcaca08c18bbb45fdf79f4be4388b64"
 dependencies = [
  "azalia-config",
  "azalia-log",
@@ -732,15 +732,15 @@ dependencies = [
 
 [[package]]
 name = "azalia-config"
-version = "0.1.8"
+version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "450f0bdd668d3b58a9aaaf523ed8982ea0089e461a15939796cc3bfaed5ee533"
+checksum = "7b9847f9dc5af65e3052b956733733229286184fe4f80de1560cc3138c70d650"
 
 [[package]]
 name = "azalia-log"
-version = "0.1.8"
+version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "11605aebb04ec98ef7860e63907170780af29e09ccfeb776fed4e9dff8f1df4d"
+checksum = "471a4d441c3a9a1be7f8bcab4f6d8f03049aea0d22a0d44816e7ec7301032b21"
 dependencies = [
  "cfg-if",
  "chrono",
@@ -753,9 +753,9 @@ dependencies = [
 
 [[package]]
 name = "azalia-remi"
-version = "0.1.8"
+version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "951bc10edbfdcda35dcb9d6381d6f6e0d164f7943d0d0fa530bf0847d5a66de0"
+checksum = "9fa15c7bef82add3eb58b50c0c162462121b21a5b0590eb2d0f023d27acd4608"
 dependencies = [
  "remi",
  "remi-azure",
@@ -2672,7 +2672,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "07033963ba89ebaf1584d767badaa2e8fcec21aedea6b8c0346d487d49c28667"
 dependencies = [
  "cfg-if",
- "windows-targets 0.48.5",
+ "windows-targets 0.53.0",
 ]
 
 [[package]]
